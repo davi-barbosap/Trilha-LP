@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "trilha-lp"
+version = "0.1.0"
+description = "Landing pages de mídia paga da Trilha: estrutura que converte e rastreamento que devolve a venda"
+requires-python = ">=3.11"
+dependencies = ["pydantic>=2.5", "pyyaml>=6"]
+
+[tool.setuptools]
+packages = ["trilha_lp"]
+
+[tool.setuptools.package-data]
+trilha_lp = ["modelo/*"]

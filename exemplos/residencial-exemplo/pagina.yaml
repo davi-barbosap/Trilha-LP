@@ -1,0 +1,98 @@
+# Página de exemplo (dados fictícios), a partir da oferta "Residencial Exemplo" do Trilha
+# (Trilha: clientes/_exemplo/ofertas/residencial-exemplo.yaml e marca.yaml).
+#   python -m trilha_lp validar exemplos/residencial-exemplo/pagina.yaml
+#   python -m trilha_lp construir exemplos/residencial-exemplo/pagina.yaml --todas
+
+pagina:
+  id: residencial-exemplo-meta
+  cliente: _exemplo
+  oferta: residencial-exemplo
+  segmento: imobiliario
+  origem: meta                    # meta: abre com a dor · google: abre com a prova social
+  titulo_seo: "Residencial Exemplo — 2 quartos com varanda a 600 m do metrô Vila Madalena"
+  descricao_seo: "Apartamentos de 58 m² com varanda gourmet na Vila Madalena. Agende sua visita ao decorado."
+
+marca:
+  nome: Imobiliária Exemplo
+  cores: { primaria: "#1F3A5F", secundaria: "#F2A541", fundo: "#FFFFFF", texto: "#1A1A1A" }
+  fontes: { titulos: Montserrat, texto: Inter }
+  registro_profissional: "CRECI 00000-J"
+  avisos_legais: ["Imagens ilustrativas.", "Incorporação registrada sob o nº 00.000 no 0º Cartório de Registro de Imóveis."]
+  politica_privacidade_url: "https://exemplo.com.br/privacidade"
+  termos_proibidos: ["imperdível", "oportunidade única"]
+  promessas_proibidas: ["aprovação garantida", "sem consulta ao SPC"]
+
+rastreio:
+  gtm_id: ""                      # GTM-XXXXXXX: tag do Google e pixel do Meta ficam no GTM
+  webhook_url: ""                 # https://<n8n>/webhook/lp — vazio = modo teste
+  pagina_obrigado: ""
+
+contato:
+  whatsapp: "5511900000000"
+  mensagem_whatsapp: "Olá! Quero saber mais sobre o Residencial Exemplo"
+
+topo:
+  titulo: "Seu 2 quartos com varanda a 10 minutos a pé do metrô Vila Madalena, sem depender do carro"
+  subtitulo: "Cansado de perder duas horas por dia no trânsito? 58 m² com varanda gourmet, rooftop com piscina e entrada parcelada em 36 vezes."
+  provas:
+    - "35% das unidades vendidas em 4 meses"
+    - "Construtora com as últimas 4 obras entregues no prazo"
+  cta: { texto: "Agendar visita ao decorado", acao: formulario }
+  reducao_medo: ["Visita sem compromisso", "Simulação com a sua renda", "Entrega prevista: dez/2028"]
+  imagem: { src: "", alt: "Fachada do Residencial Exemplo com a varanda gourmet" }
+
+dor:
+  titulo: "Morar perto de tudo não deveria custar duas horas por dia"
+  problema: "Quem trabalha na Zona Oeste e mora longe conhece a rotina: trânsito, aplicativo caro e quase nenhum tempo em casa."
+  agravamento: "Cada ano assim é aluguel pago sem construir patrimônio, e um bairro que você gosta cada vez mais longe do orçamento."
+  solucao: "No Residencial Exemplo você chega a pé na estação Vila Madalena em 10 minutos e a entrada cabe em 36 parcelas."
+
+prova_social:
+  titulo: "Mais de 300 famílias já encontraram o imóvel delas com a gente"
+  numeros:
+    - { numero: "+300", texto: "famílias atendidas desde 2015" }
+    - { numero: "4 de 4", texto: "últimas obras da construtora entregues no prazo" }
+    - { numero: "35%", texto: "das unidades vendidas em 4 meses" }
+  depoimentos:
+    - { texto: "A visita ao decorado tirou todas as dúvidas. Fizemos a simulação na hora e a entrada coube no nosso orçamento.", autor: "Carla e Rafael, compradores" }
+
+beneficios:
+  titulo: "Tudo o que muda quando você mora a 600 m do metrô"
+  itens:
+    - { titulo: "Chegue a pé na estação Vila Madalena em 10 minutos", texto: "A 600 m da linha verde: trabalho, faculdade e lazer sem depender do carro." }
+    - { titulo: "Receba os amigos na varanda gourmet de 58 m²", texto: "Planta de 2 quartos com varanda integrável à sala e churrasqueira." }
+    - { titulo: "Piscina e coworking no rooftop, sem sair de casa", texto: "Área de lazer no último andar com vista para a Zona Oeste." }
+    - { titulo: "Entrada parcelada em 36 vezes, a partir de R$ 2.100 por mês", texto: "Condição sujeita à análise de crédito. Simule com a sua renda na visita." }
+    - { titulo: "Hospital Sírio-Libanês a 12 minutos e Shopping Eldorado a 8", texto: "Tudo o que a rotina pede, perto, num bairro com vida a pé." }
+
+como_funciona:
+  titulo: "Do primeiro contato às chaves em 4 passos"
+  passos:
+    - { titulo: "Agende sua visita", texto: "Escolha o dia e o horário; a corretora confirma pelo WhatsApp." }
+    - { titulo: "Conheça o decorado", texto: "Veja a planta, a varanda e o acabamento de perto." }
+    - { titulo: "Simule a condição", texto: "Entrada, parcelas e financiamento calculados com a sua renda." }
+    - { titulo: "Reserve sua unidade", texto: "Escolha andar e posição solar com as unidades disponíveis no dia." }
+
+objecoes:
+  titulo: "As dúvidas de quem está decidindo"
+  garantias: ["Visita sem compromisso", "Construtora com obras entregues no prazo"]
+  itens:
+    - { pergunta: "A entrada cabe no meu orçamento?", resposta: "A entrada é parcelada em 36 vezes. Na visita fazemos a simulação com a sua renda." }
+    - { pergunta: "A planta de 58 m² não é pequena?", resposta: "A varanda é integrável à sala, o que amplia a área social. Vale ver no decorado." }
+    - { pergunta: "A rua não é movimentada?", resposta: "A torre fica no meio do terreno, a 40 m da rua, com área verde na frente." }
+    - { pergunta: "Quando fica pronto?", resposta: "A entrega está prevista para dezembro de 2028." }
+
+fechamento:
+  titulo: "Agende sua visita ao decorado"
+  subtitulo: "Deixe seu WhatsApp e a corretora responsável confirma o melhor horário para você."
+  lista: ["Visita sem compromisso", "Simulação com a sua renda", "Escolha de andar e posição solar"]
+  provas: ["35% das unidades vendidas em 4 meses"]
+
+formulario:
+  pedir_email: false
+  qualificacao:
+    rotulo: "O imóvel seria para"
+    opcoes: ["Morar", "Investir", "Ainda estou pesquisando"]
+  botao: "Quero agendar minha visita"
+  consentimento: "Ao enviar, você concorda em ser contatado pela Imobiliária Exemplo sobre o Residencial Exemplo."
+  confirmacao: "Recebemos! A corretora vai te chamar no WhatsApp para confirmar o horário da visita."
