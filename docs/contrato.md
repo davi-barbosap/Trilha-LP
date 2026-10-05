@@ -1,4 +1,4 @@
-# Contrato de rastreamento: página → n8n → Kommo → Trilha
+# Contrato de rastreamento: página → n8n → Kommo → Trilha-ads
 
 ## Atribuição guardada no navegador
 
@@ -28,7 +28,7 @@ O webhook responde 2xx só depois de gravar. Sem 2xx, a página mostra o erro e 
 
 ## O que o n8n grava no Kommo
 
-Campos padrão do Trilha, mais dois novos que o Trilha ainda não lê ([Kommo](https://github.com/davi-barbosap/Trilha/blob/main/docs/integracoes/kommo.md) §4):
+Campos padrão do Trilha-ads, mais dois novos que o Trilha-ads ainda não lê ([Kommo](https://github.com/davi-barbosap/Trilha-ads/blob/main/docs/integracoes/kommo.md) §4):
 
 | Payload | Kommo |
 |---|---|
@@ -36,11 +36,11 @@ Campos padrão do Trilha, mais dois novos que o Trilha ainda não lê ([Kommo](h
 | `gclid`, `gbraid`, `wbraid`, `fbclid` | campos de mesmo nome no lead |
 | `utm_*` | campos de mesmo nome no lead |
 | `utm_source` normalizado | campo `origem` |
-| `pagina_id` | campo `landing_page` (novo; para o raio-x do Trilha comparar versões de página) |
+| `pagina_id` | campo `landing_page` (novo; para o raio-x do Trilha-ads comparar versões de página) |
 | `qualificacao` | campo do cliente (ex.: "Finalidade") |
-| `event_id` | campo `event_id_lead` (novo; o W01 do Trilha passa a usá-lo no `Lead` enviado ao Meta, para deduplicar com o do navegador) |
+| `event_id` | campo `event_id_lead` (novo; o W01 do Trilha-ads passa a usá-lo no `Lead` enviado ao Meta, para deduplicar com o do navegador) |
 
-O lead entra na etapa `lead` do funil cadastrado no `perfil.yaml` do cliente no Trilha.
+O lead entra na etapa `lead` do funil cadastrado no `perfil.yaml` do cliente no Trilha-ads.
 
 ## Eventos no dataLayer (GTM)
 

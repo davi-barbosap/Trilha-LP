@@ -1,5 +1,5 @@
-# Página de exemplo (dados fictícios), a partir da oferta "Residencial Exemplo" do Trilha
-# (Trilha: clientes/_exemplo/ofertas/residencial-exemplo.yaml e marca.yaml).
+# Página de exemplo (dados fictícios), a partir da oferta "Residencial Exemplo" do Trilha-ads
+# (Trilha-ads: clientes/_exemplo/ofertas/residencial-exemplo.yaml e marca.yaml).
 #   python -m trilha_lp validar exemplos/residencial-exemplo/pagina.yaml
 #   python -m trilha_lp construir exemplos/residencial-exemplo/pagina.yaml --todas
 

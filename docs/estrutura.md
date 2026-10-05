@@ -28,7 +28,7 @@ Benefício + característica: "Chegue a pé na estação em 10 minutos" (benefí
 Do contato ao resultado: agende → visite o decorado → simule a condição → reserve. Cada passo com o benefício no título.
 
 ### 5. Objeções e garantias
-As objeções reais dos 3 eixos (preço, produto, localização) com a resposta do time, e os motivos de perda mais frequentes no Kommo. Atualize a cada mês com o pacote de briefing do Trilha.
+As objeções reais dos 3 eixos (preço, produto, localização) com a resposta do time, e os motivos de perda mais frequentes no Kommo. Atualize a cada mês com o pacote de briefing do Trilha-ads.
 
 ### 6. Fechamento
 Recapitulação, 3–4 itens do que a pessoa recebe, uma prova e o formulário. Nome e WhatsApp são obrigatórios; e-mail é opcional; uma pergunta de qualificação (morar ou investir, prazo, renda) filtra o lead.
