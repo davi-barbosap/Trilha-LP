@@ -1,0 +1,165 @@
+# Cópia dos vocabulários e parâmetros do padrão de texto da Trilha que a LP usa.
+#
+# O arquivo canônico é trilha_copy/regras/padrao.yaml, no Trilha-copy. NÃO edite aqui: mude lá e copie para cá.
+# A CI confere lista a lista (tests/test_padrao.py) e quebra se esta cópia ficar diferente.
+# Notação: termo inteiro; radical* (começo de palavra); re:expressão (regex com borda no começo).
+# O texto completo da página também passa pelo padrão inteiro no Trilha-copy: python -m trilha_copy revisar-pagina.
+
+versao: 2026-10
+janela_garantia_palavras: 8
+janela_preco_palavras: 3
+preco_padrao_por_segmento:
+  imobiliario:
+    anuncio: parcela
+    landing: a_partir_de
+    whatsapp: nunca
+pagina:
+  topo_titulo_maximo: 90
+  descricao_seo_maximo: 155
+vocabularios:
+  titulo_generico:
+  - depoimentos
+  - nossos depoimentos
+  - o que dizem nossos clientes
+  - o que nossos clientes dizem
+  - pessoas reais resultados reais
+  - resultados reais
+  - como funciona
+  - nossos diferenciais
+  - diferenciais
+  - beneficios
+  - sobre nos
+  - quem somos
+  - avaliacoes
+  - nossas avaliacoes
+  - veja o que dizem
+  - o que dizem sobre nos
+  - por que nos escolher
+  - por que escolher a gente
+  - nossos servicos
+  - servicos
+  - vantagens
+  - nossas vantagens
+  - nossa equipe
+  - passo a passo
+  - etapas
+  - fale conosco
+  - contato
+  cta_generico:
+  - enviar
+  - envie
+  - clique aqui
+  - saiba mais
+  - quero saber mais
+  - entre em contato
+  - fale conosco
+  - cadastrar
+  - cadastre-se
+  - confirmar
+  - continuar
+  - ok
+  - submit
+  garantia_de_resultado:
+  - resultado garantido
+  - resultados garantidos
+  - sucesso garantido
+  - 100% garantido
+  - risco zero
+  - sem risco
+  - sem riscos
+  - retorno certo
+  - lucro certo
+  - lucro garantido
+  - retorno garantido
+  - renda garantida
+  - valorizacao garantida
+  - valorizacao certa
+  - aprovacao garantida
+  - credito garantido
+  - financiamento garantido
+  - cura definitiva
+  - emagrecimento garantido
+  - fluencia garantida
+  - aprovacao certa
+  - re:valoriza\w* garantid\w*
+  - re:garant\w* (de )?valoriza\w*
+  resultado_garantivel:
+  - resultado*
+  - valoriz*
+  - aprovac*
+  - aprovad*
+  - credito
+  - financiamento
+  - renda
+  - retorno
+  - lucro
+  - cura
+  - emagrec*
+  - fluencia
+  - emprego
+  - vendas
+  - faturamento
+  inversao_de_risco:
+  - dinheiro de volta
+  - devolucao
+  - devolvemos
+  - re:garantia de \d+ dias
+  - re:\d+ dias de garantia
+  - garantia incondicional
+  - teste gratis
+  - sem compromisso
+  - cancele quando quiser
+  preco_valor:
+  - re:r\$ ?\d
+  preco_contexto:
+  - por
+  - a partir de
+  - desde
+  - apenas
+  - so
+  - valor
+  - valores
+  - preco
+  - custa
+  - investimento
+  - entrada
+  - parcela*
+  - mensalidade
+  - a vista
+  - ao mes
+  - por mes
+  - re:\d+ ?x
+  forma_a_partir_de:
+  - a partir de
+  - desde
+  - valores a partir
+  forma_parcela:
+  - parcela*
+  - mensal
+  - mensais
+  - mensalidade*
+  - por mes
+  - ao mes
+  - /mes
+  - re:\d+ ?x( de)?
+  promessa_proibida_imobiliario:
+  - aprovacao garantida
+  - credito garantido
+  - financiamento garantido
+  - sem consulta
+  - sem consulta ao spc
+  - sem consulta ao serasa
+  - sem analise de credito
+  - valorizacao garantida
+  - retorno garantido
+  promessa_proibida_saude:
+  - cura
+  - curar
+  - cura definitiva
+  - resultado garantido
+  - sem efeitos colaterais
+  - 100% seguro
+  - o melhor medico
+  - o melhor dentista
+  - milagr*
+  - re:(perca|emagreca|elimine) \d+ ?(kg|quilos)

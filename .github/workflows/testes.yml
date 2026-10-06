@@ -10,7 +10,15 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: "22" }
       - run: pip install -e .
+      - name: Trilha-copy, para conferir a cópia do padrão de texto
+        run: |
+          git clone --depth 1 https://github.com/davi-barbosap/Trilha-copy ../Trilha-copy
+          pip install -e ../Trilha-copy
       - run: python -m unittest discover -s tests -v
       - run: node --test tests/*.test.mjs
       - run: python -m trilha_lp validar exemplos/residencial-exemplo/pagina.yaml
       - run: python -m trilha_lp construir exemplos/residencial-exemplo/pagina.yaml --todas
+      - name: O pacote instalado leva o padrão de texto
+        run: |
+          pip install --no-deps --target /tmp/instalado .
+          cd /tmp && PYTHONPATH=/tmp/instalado python -c "import trilha_lp.padrao as p; assert '/tmp/instalado' in p.__file__, p.__file__; p.carregar()"

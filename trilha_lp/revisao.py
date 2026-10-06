@@ -1,25 +1,40 @@
 """Revisão do texto antes de publicar: regras da Trilha que o esquema não pega.
 
-Devolve avisos; quem decide é o assessor. Nada aqui reescreve o texto.
+As regras de texto seguem o padrão de texto da Trilha (o arquivo canônico mora no Trilha-copy; aqui fica a cópia dos
+vocabulários em regras/padrao-vocabularios.yaml). Três gravidades, como nas outras ferramentas:
+
+    bloqueia   não vai ao ar assim: termo ou promessa proibidos, garantia de resultado, preço onde o segmento não mostra
+    atencao    vai custar caro: título genérico, título longo, preço fora da forma, rastreamento ou imagem faltando
+    sugestao   melhora a página: botão genérico, pergunta de qualificação
+
+Quem decide é o assessor. Nada aqui reescreve o texto. O texto inteiro também passa pelo padrão completo no
+Trilha-copy, com o contrato do cliente: python -m trilha_copy revisar-pagina <pagina.yaml>.
 """
 
 from __future__ import annotations
 
 import re
-import unicodedata
+from dataclasses import dataclass
+from typing import Literal
 
+from trilha_lp import padrao
 from trilha_lp.esquema import Lp
 
-TITULOS_GENERICOS = {
-    "depoimentos", "nossos depoimentos", "o que dizem nossos clientes", "o que nossos clientes dizem",
-    "pessoas reais resultados reais", "resultados reais", "como funciona", "nossos diferenciais",
-    "diferenciais", "beneficios", "sobre nos", "quem somos",
-}
-LIMITE_TITULO = 90
+Nivel = Literal["bloqueia", "atencao", "sugestao"]
+NIVEIS: tuple[Nivel, ...] = ("bloqueia", "atencao", "sugestao")
 
 
-def _sem_acento(texto: str) -> str:
-    return unicodedata.normalize("NFKD", texto).encode("ascii", "ignore").decode().lower()
+@dataclass(frozen=True)
+class Aviso:
+    nivel: Nivel
+    texto: str
+
+    def __str__(self) -> str:
+        return self.texto
+
+
+def _sem_pontuacao(texto: str) -> str:
+    return " ".join(re.sub(r"[^a-z0-9 ]", " ", padrao.normalizar(texto)).split())
 
 
 def _textos(lp: Lp) -> list[tuple[str, str]]:
@@ -46,34 +61,75 @@ def _textos(lp: Lp) -> list[tuple[str, str]]:
     return saida
 
 
-def revisar(lp: Lp) -> list[str]:
-    avisos = []
+def _frases(texto: str) -> list[str]:
+    return [f for f in re.split(r"(?<=[.!?…])\s+|\n+", texto) if f.strip()]
+
+
+def _precos(frase: str) -> list[int]:
+    """Posições de valores em reais que são preço ("por", "a partir de", "10x"… por perto), não número de prova."""
+    janela = padrao.carregar()["janela_preco_palavras"]
+    contexto = [i for i, _ in padrao.posicoes(padrao.carregar()["vocabularios"]["preco_contexto"], frase)]
+    return [i for i, _ in padrao.posicoes(padrao.carregar()["vocabularios"]["preco_valor"], frase)
+            if any(abs(i - j) <= janela for j in contexto)]
+
+
+def revisar(lp: Lp) -> list[Aviso]:
+    avisos: list[Aviso] = []
     textos = _textos(lp)
+    segmento = lp.pagina.segmento
     proibidos = [(t, "termo proibido pela marca") for t in lp.marca.termos_proibidos]
     proibidos += [(t, "promessa proibida") for t in lp.marca.promessas_proibidas]
+    proibidos += [(t, "proibido no segmento") for t in padrao.carregar()["vocabularios"].get(f"promessa_proibida_{segmento}", [])]
+    regra_preco = padrao.carregar()["preco_padrao_por_segmento"].get(segmento, {}).get("landing", "")
     for onde, texto in textos:
-        normal = _sem_acento(texto)
         for termo, motivo in proibidos:
-            if _sem_acento(termo) in normal:
-                avisos.append(f"{onde}: {motivo} — \"{termo}\"")
-        if lp.pagina.segmento == "imobiliario" and re.search(r"r\$\s*\d", normal) and "a partir de" not in normal:
-            avisos.append(f"{onde}: preço sem \"a partir de\" (no imobiliário a landing mostra só o valor de entrada, amarrado à visita)")
-        if lp.pagina.segmento == "imobiliario" and re.search(r"valoriza\w*\s+garantid|garant\w*\s+(de\s+)?valoriza", normal):
-            avisos.append(f"{onde}: promessa de valorização garantida")
+            if termo and padrao.contem_termo(texto, termo):
+                avisos.append(Aviso("bloqueia", f"{onde}: {motivo} — \"{termo}\""))
+        for frase in _frases(texto):
+            if padrao.garante_resultado(frase):
+                avisos.append(Aviso("bloqueia", f"{onde}: garante um resultado que não depende só da empresa (\"{frase[:60]}\"): "
+                                                "mostre o que já aconteceu, com prova, ou garanta o que a empresa controla"))
+            precos = _precos(frase)
+            if precos and regra_preco == "nunca":
+                avisos.append(Aviso("bloqueia", f"{onde}: mostra preço, mas no segmento {segmento} a página não mostra"))
+            elif precos and regra_preco == "a_partir_de":
+                formas = [i for i, _ in padrao.posicoes(padrao.carregar()["vocabularios"]["forma_a_partir_de"], frase)]
+                if not all(any(0 <= i - j <= 4 for j in formas) for i in precos):
+                    avisos.append(Aviso("atencao", f"{onde}: preço sem \"a partir de\" (no segmento {segmento} a página mostra só o "
+                                                   "valor de entrada, amarrado à visita ou à simulação)"))
+    genericos = {_sem_pontuacao(t) for t in padrao.carregar()["vocabularios"]["titulo_generico"]}
     for onde, titulo in [("prova_social.titulo", lp.prova_social.titulo if lp.prova_social else ""),
-                         ("beneficios.titulo", lp.beneficios.titulo), ("como_funciona.titulo", lp.como_funciona.titulo)]:
-        if re.sub(r"[^a-z ]", "", _sem_acento(titulo)).strip() in TITULOS_GENERICOS:
-            avisos.append(f"{onde}: título genérico (\"{titulo}\"); o título do bloco diz o benefício, porque muita gente só lê os títulos")
-    if len(lp.topo.titulo) > LIMITE_TITULO:
-        avisos.append(f"topo.titulo com {len(lp.topo.titulo)} caracteres: no celular passa de 3 linhas e empurra o botão para baixo")
+                         ("beneficios.titulo", lp.beneficios.titulo), ("como_funciona.titulo", lp.como_funciona.titulo),
+                         ("objecoes.titulo", lp.objecoes.titulo), ("fechamento.titulo", lp.fechamento.titulo)]:
+        if titulo and _sem_pontuacao(titulo) in genericos:
+            avisos.append(Aviso("atencao", f"{onde}: título genérico (\"{titulo}\"); o título do bloco diz o benefício, porque "
+                                           "muita gente só lê os títulos"))
+    ctas = {_sem_pontuacao(t) for t in padrao.carregar()["vocabularios"]["cta_generico"]}
+    for onde, botao in (("topo.cta", lp.topo.cta.texto), ("formulario.botao", lp.formulario.botao)):
+        if _sem_pontuacao(botao) in ctas:
+            avisos.append(Aviso("sugestao", f"{onde}: botão genérico (\"{botao}\"): diga o que a pessoa recebe ao clicar"))
+    limites = padrao.carregar()["pagina"]
+    if len(lp.topo.titulo) > limites["topo_titulo_maximo"]:
+        avisos.append(Aviso("atencao", f"topo.titulo com {len(lp.topo.titulo)} caracteres: no celular passa de 3 linhas e "
+                                       "empurra o botão para baixo"))
+    if len(lp.pagina.descricao_seo) > limites["descricao_seo_maximo"]:
+        avisos.append(Aviso("atencao", f"pagina.descricao_seo com {len(lp.pagina.descricao_seo)} caracteres: o Google corta "
+                                       "no resultado da busca"))
+    # Estrutura e rastreamento: regras da LP, não do padrão de texto.
     if not lp.topo.imagem.src:
-        avisos.append("topo.imagem sem arquivo: a página sai com um espaço reservado")
+        avisos.append(Aviso("atencao", "topo.imagem sem arquivo: a página sai com um espaço reservado"))
     if not lp.rastreio.webhook_url:
-        avisos.append("rastreio.webhook_url vazio: modo teste, nenhum lead chega ao Kommo")
+        avisos.append(Aviso("atencao", "rastreio.webhook_url vazio: modo teste, nenhum lead chega ao Kommo"))
     if not lp.rastreio.gtm_id:
-        avisos.append("rastreio.gtm_id vazio: sem tag do Google e do Meta, o freio de emergência e a otimização ficam cegos")
+        avisos.append(Aviso("atencao", "rastreio.gtm_id vazio: sem tag do Google e do Meta, o freio de emergência e a "
+                                       "otimização ficam cegos"))
     if lp.formulario.qualificacao is None:
-        avisos.append("formulario sem pergunta de qualificação: mais volume, lead menos filtrado")
+        avisos.append(Aviso("sugestao", "formulario sem pergunta de qualificação: mais volume, lead menos filtrado"))
     if lp.dor and lp.prova_social is None:
-        avisos.append("sem bloco prova_social: a página não tem prova além do topo")
-    return avisos
+        avisos.append(Aviso("atencao", "sem bloco prova_social: a página não tem prova além do topo"))
+    vistos, unicos = set(), []
+    for a in avisos:
+        if a.texto not in vistos:
+            vistos.add(a.texto)
+            unicos.append(a)
+    return sorted(unicos, key=lambda a: NIVEIS.index(a.nivel))
