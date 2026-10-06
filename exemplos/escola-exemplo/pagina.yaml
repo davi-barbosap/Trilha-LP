@@ -1,0 +1,105 @@
+# Página de exemplo (dados fictícios): a Escola Exemplo de Inglês, o mesmo cliente fictício do Trilha-briefing,
+# do Trilha-copy e do Trilha-ads. Ponto de partida: o rascunho do briefing
+#   python -m trilha_briefing exportar clientes/_exemplo --para lp --oferta conversacao-adultos --origem meta
+# reescrito pelo assessor (frases inteiras na dor, objeções na voz do aluno, fechamento com título próprio).
+#   python -m trilha_lp validar   exemplos/escola-exemplo/pagina.yaml
+#   python -m trilha_lp construir exemplos/escola-exemplo/pagina.yaml --todas
+
+pagina:
+  id: conversacao-adultos-meta
+  cliente: _exemplo
+  oferta: conversacao-adultos
+  segmento: padrao
+  origem: meta                    # meta: abre com a dor · google: abre com a prova social
+  titulo_seo: "Inglês para falar no trabalho — Escola Exemplo de Inglês"
+  descricao_seo: "Turmas de até 6 adultos, com as situações do seu trabalho. Agende uma aula experimental."
+
+marca:
+  nome: Escola Exemplo de Inglês
+  cores: { primaria: "#123C69", secundaria: "#F2B33D", fundo: "#FFFFFF", texto: "#1A1A1A" }
+  fontes: { titulos: Poppins, texto: Inter }
+  avisos_legais: ["Resultados variam conforme frequência e dedicação."]
+  politica_privacidade_url: "https://exemplo.com.br/privacidade"
+  termos_proibidos: ["imperdível", "fluência garantida", "método revolucionário"]
+  promessas_proibidas: ["fluência garantida", "aprenda em 30 dias"]
+
+rastreio:
+  gtm_id: ""                      # GTM-XXXXXXX: tag do Google e pixel do Meta ficam no GTM
+  webhook_url: ""                 # https://<n8n>/webhook/lp — vazio = modo teste
+  pagina_obrigado: ""
+
+contato:
+  whatsapp: "5541900000000"
+  mensagem_whatsapp: "Olá! Quero agendar uma aula experimental de inglês para o trabalho"
+
+topo:
+  titulo: "Fale nas reuniões em inglês treinando com as situações do seu trabalho"
+  subtitulo: "Você entende inglês, mas trava para falar. Em turmas de até 6, você fala a maior parte da aula e repõe em qualquer horário da grade."
+  provas:
+    - "4,9 de nota com 87 avaliações no Google"
+    - "No máximo 6 alunos por turma"
+  cta: { texto: "Agendar aula experimental", acao: formulario }
+  reducao_medo: ["Cancele sem multa depois do primeiro mês", "Mensalidade no cartão ou boleto", "Presencial ou online, na mesma turma"]
+  imagem: { src: "", alt: "Aluna adulta conversando em inglês numa turma pequena da Escola Exemplo" }
+
+dor:
+  titulo: "Fico calado na reunião com o time de fora, mesmo sabendo o assunto"
+  problema: "Você prepara o que vai dizer, entende tudo o que os outros falam e, na hora de responder, as palavras não saem."
+  agravamento: "Aí o colega fala por você, e fica a vergonha de não ter dito o que você sabia."
+  solucao: "Numa turma de até 6, você fala a maior parte da aula e treina as frases das suas reuniões até elas saírem sem ensaio."
+
+prova_social:
+  titulo: "Da reunião em silêncio à apresentação do trimestre"
+  numeros:
+    - { numero: "4,9", texto: "de nota com 87 avaliações no Google" }
+    - { numero: "6", texto: "alunos no máximo por turma" }
+    - { numero: "+1.200", texto: "adultos formados desde 2017" }
+  depoimentos:
+    - { texto: "Em quatro meses eu apresentei o resultado do trimestre em inglês, sem ler.", autor: "Renata, analista de dados" }
+    - { texto: "A reposição salvou: viajo a trabalho e nunca perdi conteúdo.", autor: "Carlos, gerente comercial" }
+
+beneficios:
+  titulo: "O que muda quando você treina para a reunião, não para a prova"
+  itens:
+    - { titulo: "Responda na hora, sem roteiro", texto: "A aula treina as frases das suas reuniões até elas saírem sem ensaio." }
+    - { titulo: "Fale em todas as aulas, numa turma de até 6", texto: "Com poucos alunos, você fala a maior parte do tempo, não só escuta." }
+    - { titulo: "Reponha em qualquer horário da grade", texto: "Viagem, reunião ou plantão não fazem você perder conteúdo." }
+    - { titulo: "Treine com as situações do seu trabalho", texto: "Reunião, apresentação e entrevista: o conteúdo parte do que você vive." }
+    - { titulo: "Veja sua evolução todo mês", texto: "O professor mostra o que você já fala e qual é o próximo passo." }
+
+como_funciona:
+  titulo: "Da aula experimental à sua turma em 4 passos"
+  passos:
+    - { titulo: "Aula experimental", texto: "Uma aula de verdade, com turma, para você ver se o ritmo serve." }
+    - { titulo: "Nivelamento", texto: "15 minutos de conversa para achar a turma certa." }
+    - { titulo: "Turma de até 6", texto: "Duas aulas por semana, presencial ou online." }
+    - { titulo: "Revisão a cada mês", texto: "O professor mostra o que você já fala e o próximo passo." }
+
+objecoes:
+  titulo: "As dúvidas de quem já tentou e está decidindo"
+  garantias: ["Cancele sem multa depois do primeiro mês"]
+  itens:
+    - { pergunta: "Não tenho horário fixo. Consigo acompanhar?", resposta: "Consegue: você repõe em qualquer horário da grade, presencial ou online." }
+    - { pergunta: "Já tentei inglês e larguei. Por que agora seria diferente?", resposta: "Na turma de até 6 você fala em todas as aulas, e o professor acompanha a sua evolução todo mês." }
+    - { pergunta: "Um aplicativo não é mais barato?", resposta: "É. O aplicativo treina vocabulário; a reunião pede conversa ao vivo, e é isso que você treina aqui." }
+
+fechamento:
+  titulo: "Veja numa aula de verdade se o ritmo serve para você"
+  subtitulo: "Deixe seu WhatsApp e a equipe da Escola Exemplo de Inglês combina o melhor horário com você."
+  lista:
+    - "Turmas de até 6 alunos"
+    - "Reposição em qualquer horário da grade"
+    - "Cancele sem multa depois do primeiro mês"
+    - "Mensalidade no cartão ou boleto"
+  provas:
+    - "4,9 de nota com 87 avaliações no Google"
+    - "+1.200 adultos formados desde 2017"
+
+formulario:
+  pedir_email: false
+  qualificacao:
+    rotulo: "Para que você precisa do inglês?"
+    opcoes: ["Trabalho", "Viagem", "Ainda estou vendo"]
+  botao: "Agendar aula experimental"
+  consentimento: "Ao enviar, você concorda em ser contatado pela Escola Exemplo de Inglês sobre a aula experimental."
+  confirmacao: "Recebemos! A equipe da Escola Exemplo de Inglês vai te chamar no WhatsApp para combinar o horário."

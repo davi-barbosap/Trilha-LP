@@ -4,7 +4,7 @@ Landing pages de mídia paga da Trilha (Meta Ads e Google Ads). Cada página seg
 
 A ferramenta **não escreve o texto e não faz o design visual da marca**. O texto é do assessor e da criação. A estrutura, as regras, o rastreamento e a montagem são daqui.
 
-Serve para qualquer segmento; as regras de um segmento só valem quando a página declara esse segmento. O exemplo (`exemplos/residencial-exemplo/`) é um lançamento imobiliário fictício, para mostrar também as regras do imobiliário (registro profissional e preço "a partir de").
+Serve para qualquer segmento; as regras de um segmento só valem quando a página declara esse segmento. O exemplo (`exemplos/escola-exemplo/`) é a Escola Exemplo de Inglês, o mesmo cliente fictício do Trilha-briefing, do Trilha-copy e do Trilha-ads. As regras do imobiliário (registro profissional e preço "a partir de") são exercitadas pela página de teste em `tests/fixtures/residencial-exemplo/`.
 
 ## Ecossistema Trilha
 
@@ -81,7 +81,7 @@ O texto inteiro também passa pelo padrão completo, com o contrato do cliente, 
 
 ## Situação atual
 
-Versão 0.2.0, sem cliente real ainda. Pontos em aberto:
+Versão 0.2.1, sem cliente real ainda. Pontos em aberto:
 - os exemplos da documentação de estrutura ainda são do imobiliário.
 
 ## Como usar
@@ -100,8 +100,8 @@ python -m trilha_lp construir lp/minha-cliente/X-meta/pagina.yaml --todas      #
 Neste repositório, sobre o exemplo:
 
 ```bash
-python -m trilha_lp validar   exemplos/residencial-exemplo/pagina.yaml
-python -m trilha_lp construir exemplos/residencial-exemplo/pagina.yaml --todas
+python -m trilha_lp validar   exemplos/escola-exemplo/pagina.yaml
+python -m trilha_lp construir exemplos/escola-exemplo/pagina.yaml --todas
 ```
 
 Sem `webhook_url`, a página roda em **modo teste**: o formulário funciona e dispara o evento com `entrega: modo_teste`, mas nenhum lead é enviado.
@@ -111,9 +111,9 @@ Sem `webhook_url`, a página roda em **modo teste**: o formulário funciona e di
 ```
 trilha_lp/           esquema, revisão do texto, montagem da página, linha de comando
 trilha_lp/modelo/    estilo.css e rastreio.js (copiados para cada página)
-exemplos/            página de exemplo (dados fictícios)
+exemplos/            página de exemplo (dados fictícios): a escola de inglês
 docs/                estrutura, contrato de rastreamento, checklist de publicação
-tests/               testes (Python e JavaScript)
+tests/               testes (Python e JavaScript); fixtures/ tem a página de teste do imobiliário
 ```
 
 ## Documentação
