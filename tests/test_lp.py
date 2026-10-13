@@ -51,18 +51,52 @@ class TestEsquema(unittest.TestCase):
 
 
 class TestRevisao(unittest.TestCase):
+    def textos(self, d, nivel=None):
+        return " | ".join(a.texto for a in revisar(Lp.model_validate(d)) if nivel is None or a.nivel == nivel)
+
     def test_pega_termo_proibido_preco_solto_e_titulo_generico(self):
         d = dados()
         d["topo"]["subtitulo"] = "Oportunidade única: apartamento por R$ 540.000"
         d["prova_social"]["titulo"] = "Depoimentos"
-        avisos = " | ".join(revisar(Lp.model_validate(d)))
-        self.assertIn("oportunidade única", avisos)
-        self.assertIn("preço sem \"a partir de\"", avisos)
-        self.assertIn("título genérico", avisos)
+        self.assertIn("oportunidade única", self.textos(d, "bloqueia"))
+        self.assertIn("preço sem \"a partir de\"", self.textos(d, "atencao"))
+        self.assertIn("título genérico", self.textos(d, "atencao"))
 
     def test_a_partir_de_e_aceito(self):
         avisos = revisar(carregar(EXEMPLO))
-        self.assertFalse(any("preço sem" in a for a in avisos))
+        self.assertFalse(any("preço sem" in a.texto for a in avisos))
+        self.assertFalse(any(a.nivel == "bloqueia" for a in avisos))
+
+    def test_numero_de_prova_em_reais_nao_e_preco(self):
+        d = dados()
+        d["topo"]["subtitulo"] = "R$ 80 milhões em obras entregues no prazo desde 2010"
+        self.assertNotIn("preço sem", self.textos(d))
+
+    def test_termo_inteiro_e_garantia_em_qualquer_segmento(self):
+        d = dados()
+        d["marca"]["termos_proibidos"] = ["corra"]
+        d["topo"]["subtitulo"] = "Caso ocorra um atraso, avisamos na hora"
+        self.assertNotIn("corra", self.textos(d))
+        d["topo"]["subtitulo"] = "Valorização garantida em 2 anos"
+        self.assertIn("garante um resultado", self.textos(d, "bloqueia"))
+
+    def test_lista_do_segmento_e_botao_generico(self):
+        d = dados()
+        d["topo"]["subtitulo"] = "Aprovação garantida, sem consulta ao SPC"
+        d["formulario"]["botao"] = "Enviar"
+        self.assertIn("proibido no segmento", self.textos(d, "bloqueia"))
+        self.assertIn("botão genérico", self.textos(d, "sugestao"))
+
+    def test_validar_sai_com_erro_quando_bloqueia(self):
+        import tempfile
+        from trilha_lp.__main__ import main
+        d = dados()
+        d["topo"]["subtitulo"] = "Oportunidade única: apartamento a partir de R$ 540.000"
+        with tempfile.TemporaryDirectory() as tmp:
+            caminho = Path(tmp) / "pagina.yaml"
+            caminho.write_text(yaml.safe_dump(d, allow_unicode=True), encoding="utf-8")
+            self.assertEqual(main(["validar", str(caminho)]), 1)
+        self.assertEqual(main(["validar", str(EXEMPLO)]), 0)
 
 
 class TestPagina(unittest.TestCase):

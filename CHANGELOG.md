@@ -2,6 +2,15 @@
 
 As versões anteriores estão descritas no histórico do Git.
 
+## 0.2.0 — padrão de texto da Trilha (out/2026)
+
+- **A revisão do texto segue o padrão de texto da Trilha.** O arquivo canônico mora no Trilha-copy (`trilha_copy/regras/padrao.yaml`). A LP guarda a cópia dos vocabulários e parâmetros que usa em `trilha_lp/regras/padrao-vocabularios.yaml`, e `tests/test_padrao.py` confere essa cópia lista a lista contra o Trilha-copy na CI.
+- **Três gravidades:** bloqueia, atenção e sugestão. Antes, tudo saía como "Atenção" e `validar` passava mesmo com termo proibido. Agora `validar` e `construir` saem com erro quando algo bloqueia.
+- **Termos casam como palavra inteira:** "corra" não pega mais "ocorra".
+- **Garantia de resultado** vale em qualquer segmento. Antes, só a valorização no imobiliário.
+- **Preço pelo padrão do segmento:** no imobiliário, a página mostra "a partir de". Número de prova em reais não conta mais como preço. A regra comercial do próprio cliente é conferida no Trilha-copy (`revisar-pagina`), que tem o contrato.
+- **Novas:** lista de promessas proibidas do segmento, título genérico também em objeções e fechamento, botão genérico, descrição de SEO longa.
+
 ## 0.1.1 — organização do ecossistema (out/2026)
 
 Nenhuma mudança de comportamento.

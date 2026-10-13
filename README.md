@@ -22,7 +22,7 @@ O código da célula da grade (`PT01`, `GB01`…) amarra as etapas. Ele vai no a
 
 | Comando | O que faz |
 |---|---|
-| `validar <pagina.yaml>` | Confere o esquema (blocos obrigatórios, quantidades, origem, HTTPS do webhook, registro profissional quando o segmento exige) e revisa o texto (lista abaixo). |
+| `validar <pagina.yaml>` | Confere o esquema (blocos obrigatórios, quantidades, origem, HTTPS do webhook, registro profissional quando o segmento exige) e revisa o texto (lista abaixo). Sai com erro quando algo bloqueia. |
 | `construir <pagina.yaml> [--origem meta\|google \| --todas]` | Monta a página estática em `dist/<id>/` (`index.html` com CSS embutido e `rastreio.js`). Gera a versão de outra origem de tráfego, porque a ordem dos blocos muda. |
 
 ## Como faz
@@ -43,11 +43,20 @@ O código da célula da grade (`PT01`, `GB01`…) amarra as etapas. Ele vai no a
 
 Regras de texto bloco a bloco em [docs/estrutura.md](docs/estrutura.md).
 
-**A revisão do texto** aponta:
-- termos e promessas proibidos pela marca;
-- títulos genéricos ("Depoimentos", "Como funciona");
-- título longo demais para o celular;
-- no imobiliário: preço sem "a partir de" e promessa de valorização garantida.
+**A revisão do texto** segue o padrão de texto da Trilha. O arquivo canônico mora no Trilha-copy; aqui fica a cópia dos vocabulários, conferida na CI. Os avisos vêm em três gravidades, e `validar` e `construir` saem com erro quando algo bloqueia:
+- **Bloqueia:**
+  - termos e promessas proibidos pela marca ou pelo segmento (palavra inteira: "corra" não pega "ocorra");
+  - garantia de resultado, em qualquer segmento;
+  - preço onde o segmento não mostra.
+- **Atenção:**
+  - título de bloco genérico ("Depoimentos", "Como funciona");
+  - título do topo longo para o celular e descrição de SEO longa;
+  - preço fora da forma do segmento (no imobiliário, "a partir de"). Número de prova em reais, como "R$ 80 milhões em obras", não conta como preço.
+  - imagem, webhook ou GTM faltando;
+  - página sem prova social.
+- **Sugestão:** botão genérico ("Enviar") e formulário sem pergunta de qualificação.
+
+O texto inteiro também passa pelo padrão completo, com o contrato do cliente, no Trilha-copy: `python -m trilha_copy revisar-pagina lp/<id>/<pagina>/pagina.yaml`. Lá entram número sem lastro, urgência sem lastro, voz, legibilidade e objeção sem resposta.
 
 **O rastreamento** ([docs/contrato.md](docs/contrato.md)):
 - UTMs e identificadores de clique (`gclid`, `gbraid`, `wbraid`, `fbclid`…) ficam guardados por 90 dias. Um clique novo com campanha substitui o anterior; uma visita sem campanha não apaga a mídia paga.
@@ -72,8 +81,7 @@ Regras de texto bloco a bloco em [docs/estrutura.md](docs/estrutura.md).
 
 ## Situação atual
 
-Versão 0.1.1, sem cliente real ainda. Pontos em aberto:
-- a revisão de texto daqui e a do Trilha-copy são separadas e podem divergir;
+Versão 0.2.0, sem cliente real ainda. Pontos em aberto:
 - os exemplos da documentação de estrutura ainda são do imobiliário.
 
 ## Como usar
@@ -85,6 +93,7 @@ pip install -e .
 cd ../Trilha-clientes
 python -m trilha_briefing exportar briefing/minha-cliente --para lp --oferta X --saida lp/minha-cliente   # rascunho
 python -m trilha_lp validar   lp/minha-cliente/X-meta/pagina.yaml
+python -m trilha_copy revisar-pagina lp/minha-cliente/X-meta/pagina.yaml   # o texto pelo padrão completo (Trilha-copy)
 python -m trilha_lp construir lp/minha-cliente/X-meta/pagina.yaml --todas      # dist/X-meta/ e dist/X-google/ (não versionar)
 ```
 

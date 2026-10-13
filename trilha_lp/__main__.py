@@ -27,12 +27,20 @@ def _carregar(caminho: str):
         return None
 
 
-def _avisos(lp) -> None:
+ROTULO = {"bloqueia": "Bloqueia", "atencao": "Atenção", "sugestao": "Sugestão"}
+
+
+def _avisos(lp) -> bool:
+    """Mostra os avisos por gravidade; True se algum bloqueia."""
     avisos = revisar(lp)
     for aviso in avisos:
-        print(f"Atenção: {aviso}")
+        print(f"{ROTULO[aviso.nivel]}: {aviso.texto}")
     if not avisos:
         print("Revisão: nenhum aviso")
+    bloqueia = any(a.nivel == "bloqueia" for a in avisos)
+    if bloqueia:
+        print("✗ há aviso que bloqueia: a página não vai ao ar assim", file=sys.stderr)
+    return bloqueia
 
 
 def cmd_validar(args) -> int:
@@ -40,8 +48,7 @@ def cmd_validar(args) -> int:
     if lp is None:
         return 1
     print(f"OK — '{lp.pagina.id}' ({lp.marca.nome}, origem {lp.pagina.origem})")
-    _avisos(lp)
-    return 0
+    return 1 if _avisos(lp) else 0
 
 
 def cmd_construir(args) -> int:
@@ -59,8 +66,7 @@ def cmd_construir(args) -> int:
             return 1
         destino = construir(versao, args.saida)
         print(f"Página '{versao.pagina.id}' gerada em {destino}/index.html")
-    _avisos(lp)
-    return 0
+    return 1 if _avisos(lp) else 0
 
 
 def main(argv=None) -> int:
