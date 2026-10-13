@@ -10,7 +10,8 @@ from trilha_lp.construir import construir, html
 from trilha_lp.esquema import Lp, carregar
 from trilha_lp.revisao import revisar
 
-EXEMPLO = Path(__file__).parents[1] / "exemplos" / "residencial-exemplo" / "pagina.yaml"
+EXEMPLO = Path(__file__).parent / "fixtures" / "residencial-exemplo" / "pagina.yaml"  # imobiliário: regras do segmento
+ESCOLA = Path(__file__).parents[1] / "exemplos" / "escola-exemplo" / "pagina.yaml"  # o exemplo documentado
 
 
 def dados():
@@ -120,6 +121,17 @@ class TestPagina(unittest.TestCase):
         self.assertIn("GTM-ABC1234", pagina)
         self.assertLess(pagina.index("gtag('consent','default'"), pagina.index("googletagmanager.com/gtm.js"))
         self.assertIn("CRECI 00000-J", pagina)
+
+    def test_exemplo_documentado_valida_e_constroi(self):
+        # a escola é o cliente fictício de todo o ecossistema; a página de teste do imobiliário fica em fixtures/
+        from trilha_lp.__main__ import main
+
+        self.assertEqual(main(["validar", str(ESCOLA)]), 0)
+        lp = carregar(ESCOLA)
+        self.assertEqual((lp.pagina.cliente, lp.pagina.segmento), ("_exemplo", "padrao"))
+        self.assertFalse([a for a in revisar(lp) if a.nivel == "bloqueia"])
+        with tempfile.TemporaryDirectory() as tmp:
+            self.assertTrue((construir(lp.para_origem("google"), tmp) / "index.html").is_file())
 
     def test_construir_gera_pagina_e_script(self):
         with tempfile.TemporaryDirectory() as tmp:
