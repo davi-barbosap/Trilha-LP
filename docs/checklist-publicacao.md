@@ -25,5 +25,5 @@ Nada de campanha ligada antes de tudo marcado.
 - [ ] Domínio com HTTPS
 
 ## Depois de ligar
-- [ ] Na primeira semana, o raio-x do Trilha mostra os leads da página com canal e `landing_page` preenchidos (sem "Não rastreado")
+- [ ] Na primeira semana, o raio-x do Trilha-ads mostra os leads da página com canal e `landing_page` preenchidos (sem "Não rastreado")
 - [ ] Teste A/B decidido pela qualificação e pela visita por `pagina_id`, com amostra mínima
