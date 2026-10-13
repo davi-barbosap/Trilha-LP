@@ -28,12 +28,14 @@ O webhook responde 2xx só depois de gravar. Sem 2xx, a página mostra o erro e 
 
 ## O que o n8n grava no Kommo
 
-Campos padrão do Trilha-ads, mais dois novos que o Trilha-ads ainda não lê ([Kommo](https://github.com/davi-barbosap/Trilha-ads/blob/main/docs/integracoes/kommo.md) §4):
+Campos padrão do Trilha-ads, criados em toda conta pelo `python -m trilha kommo preparar` ([Kommo](https://github.com/davi-barbosap/Trilha-ads/blob/main/docs/integracoes/kommo.md) §4). `landing_page` e `event_id_lead` ainda não são lidos pelo raio-x nem pelo W01.
+
+**Pendente — bloqueia página em campanha:** o fluxo que recebe este POST e grava lead e contato no Kommo (W15 no [roadmap do Trilha-ads](https://github.com/davi-barbosap/Trilha-ads/blob/main/docs/roadmap.md)) ainda não existe. Como o payload traz dados pessoais, a gravação passa pela trilha-api ([ADR-002](https://github.com/davi-barbosap/Trilha-ads/blob/main/docs/decisoes/002-n8n-orquestrador.md)), não por nós do n8n.
 
 | Payload | Kommo |
 |---|---|
 | `nome`, `telefone`, `email` | contato (telefone em E.164 é a chave da pessoa no raio-x) |
-| `gclid`, `gbraid`, `wbraid`, `fbclid` | campos de mesmo nome no lead |
+| `gclid`, `gbraid`, `wbraid`, `fbclid`, `ttclid` | campos de mesmo nome no lead |
 | `utm_*` | campos de mesmo nome no lead |
 | `utm_source` normalizado | campo `origem` |
 | `pagina_id` | campo `landing_page` (novo; para o raio-x do Trilha-ads comparar versões de página) |
